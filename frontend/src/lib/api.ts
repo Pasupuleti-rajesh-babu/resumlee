@@ -1,4 +1,10 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+// In Vercel experimental-services deployments both services share a domain,
+// so the backend is reachable at /_/backend. In local dev it runs on port 8000.
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL ||
+  (typeof window !== "undefined" && window.location.hostname !== "localhost"
+    ? "/_/backend"
+    : "http://localhost:8000");
 
 export interface TailorResumeParams {
   file: File;
