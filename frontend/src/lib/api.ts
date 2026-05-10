@@ -1,17 +1,8 @@
-// In Vercel experimental-services deployments both services share a domain,
-// so the backend is reachable at /_/backend. In local dev it runs on port 8000.
 const API_URL =
   process.env.NEXT_PUBLIC_API_URL ||
   (typeof window !== "undefined" && window.location.hostname !== "localhost"
     ? "/_/backend"
     : "http://localhost:8000");
-
-export interface TailorResumeParams {
-  file: File;
-  jobDescription: string;
-  targetRole?: string;
-  accessCode?: string;
-}
 
 export class ApiError extends Error {
   constructor(
@@ -23,39 +14,93 @@ export class ApiError extends Error {
   }
 }
 
+async function handleResponse<T>(res: Response): Promise<T> {
+  if (!res.ok) {
+    let detail = `Request failed with status ${res.status}`;
+    try {
+      const json = await res.json();
+      detail = json.detail || detail;
+    } catch {
+      // ignore
+    }
+    throw new ApiError(res.status, detail);
+  }
+  return res.json() as Promise<T>;
+}
+
+// ── Types ─────────────────────────────────────────────────────────────────────
+
+export interface ClientInfo {
+  client_index: number;
+  client_name: string;
+  role: string;
+  date_range: string;
+}
+
+export interface AnalyzeResumeResult {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  resume_map: Record<string, any>;
+  clients: ClientInfo[];
+  total_clients: number;
+}
+
+export interface TailorResumeParams {
+  file: File;
+  jobDescription: string;
+  targetRole?: string;
+  accessCode?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  resumeMap: Record<string, any>;
+  selectedClients: string; // "1,2" | "all"
+}
+
+// ── API calls ─────────────────────────────────────────────────────────────────
+
+export async function analyzeResume({
+  file,
+  accessCode,
+}: {
+  file: File;
+  accessCode?: string;
+}): Promise<AnalyzeResumeResult> {
+  const fd = new FormData();
+  fd.append("resume_file", file);
+  if (accessCode?.trim()) fd.append("access_code", accessCode.trim());
+
+  const res = await fetch(`${API_URL}/analyze-resume`, { method: "POST", body: fd });
+  return handleResponse<AnalyzeResumeResult>(res);
+}
+
 export async function tailorResume({
   file,
   jobDescription,
   targetRole,
   accessCode,
+  resumeMap,
+  selectedClients,
 }: TailorResumeParams): Promise<Blob> {
-  const formData = new FormData();
-  formData.append("resume_file", file);
-  formData.append("job_description", jobDescription);
-  if (targetRole?.trim()) {
-    formData.append("target_role", targetRole.trim());
-  }
-  if (accessCode?.trim()) {
-    formData.append("access_code", accessCode.trim());
-  }
+  const fd = new FormData();
+  fd.append("resume_file", file);
+  fd.append("job_description", jobDescription);
+  fd.append("resume_map", JSON.stringify(resumeMap));
+  fd.append("selected_clients", selectedClients);
+  if (targetRole?.trim()) fd.append("target_role", targetRole.trim());
+  if (accessCode?.trim()) fd.append("access_code", accessCode.trim());
 
-  const response = await fetch(`${API_URL}/tailor-resume`, {
-    method: "POST",
-    body: formData,
-  });
+  const res = await fetch(`${API_URL}/tailor-resume`, { method: "POST", body: fd });
 
-  if (!response.ok) {
-    let detail = `Request failed with status ${response.status}`;
+  if (!res.ok) {
+    let detail = `Request failed with status ${res.status}`;
     try {
-      const json = await response.json();
+      const json = await res.json();
       detail = json.detail || detail;
     } catch {
-      // ignore parse error
+      // ignore
     }
-    throw new ApiError(response.status, detail);
+    throw new ApiError(res.status, detail);
   }
 
-  return response.blob();
+  return res.blob();
 }
 
 export function downloadBlob(blob: Blob, filename: string): void {
