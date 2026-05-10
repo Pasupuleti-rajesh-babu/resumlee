@@ -9,6 +9,7 @@ export default function TailorWorkspace() {
   const [file, setFile] = useState<File | null>(null);
   const [jobDescription, setJobDescription] = useState("");
   const [targetRole, setTargetRole] = useState("");
+  const [accessCode, setAccessCode] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [errorMsg, setErrorMsg] = useState("");
   const [isDragging, setIsDragging] = useState(false);
@@ -60,11 +61,16 @@ export default function TailorWorkspace() {
       return;
     }
 
+    if (!accessCode.trim()) {
+      setErrorMsg("Please enter your access code to use Resumelee.");
+      return;
+    }
+
     setErrorMsg("");
     setStatus("tailoring");
 
     try {
-      const blob = await tailorResume({ file, jobDescription, targetRole });
+      const blob = await tailorResume({ file, jobDescription, targetRole, accessCode });
       downloadBlob(blob, "tailored_resume.docx");
       setStatus("done");
     } catch (err) {
@@ -81,6 +87,7 @@ export default function TailorWorkspace() {
     setFile(null);
     setJobDescription("");
     setTargetRole("");
+    setAccessCode("");
     setStatus("idle");
     setErrorMsg("");
   };
@@ -101,8 +108,36 @@ export default function TailorWorkspace() {
 
         <div className="card p-6 sm:p-8">
           <div className="grid lg:grid-cols-2 gap-8">
-            {/* Left column — upload + role */}
+            {/* Left column — access code + upload + role */}
             <div className="flex flex-col gap-6">
+              {/* Access code */}
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                  Access code
+                  <span className="text-red-400 ml-1">*</span>
+                </label>
+                <div className="relative">
+                  <input
+                    type="password"
+                    value={accessCode}
+                    onChange={(e) => setAccessCode(e.target.value)}
+                    placeholder="Enter your access code"
+                    autoComplete="off"
+                    className="input-field pr-10"
+                  />
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-300">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                      <rect x="3" y="7" width="10" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.4" />
+                      <path d="M5.5 7V5a2.5 2.5 0 015 0v2" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+                      <circle cx="8" cy="10.5" r="1" fill="currentColor" />
+                    </svg>
+                  </span>
+                </div>
+                <p className="text-xs text-slate-400 mt-1.5">
+                  Don&apos;t have a code? Contact us to get access.
+                </p>
+              </div>
+
               {/* Upload zone */}
               <div>
                 <label className="block text-sm font-semibold text-slate-700 mb-2">

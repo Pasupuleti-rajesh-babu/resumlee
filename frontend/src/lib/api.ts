@@ -10,6 +10,7 @@ export interface TailorResumeParams {
   file: File;
   jobDescription: string;
   targetRole?: string;
+  accessCode?: string;
 }
 
 export class ApiError extends Error {
@@ -26,12 +27,16 @@ export async function tailorResume({
   file,
   jobDescription,
   targetRole,
+  accessCode,
 }: TailorResumeParams): Promise<Blob> {
   const formData = new FormData();
   formData.append("resume_file", file);
   formData.append("job_description", jobDescription);
   if (targetRole?.trim()) {
     formData.append("target_role", targetRole.trim());
+  }
+  if (accessCode?.trim()) {
+    formData.append("access_code", accessCode.trim());
   }
 
   const response = await fetch(`${API_URL}/tailor-resume`, {

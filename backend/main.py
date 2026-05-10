@@ -14,6 +14,10 @@ from services.resume_tailor import tailor_resume
 
 ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "*").split(",")
 
+# When ACCESS_CODE is set in the environment, every tailor request must supply it.
+# Leave it unset (or empty) to disable the gate — useful for local development.
+ACCESS_CODE = os.getenv("ACCESS_CODE", "").strip()
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -46,7 +50,12 @@ async def tailor_resume_endpoint(
     resume_file: UploadFile = File(...),
     job_description: str = Form(...),
     target_role: str = Form(default=""),
+    access_code: str = Form(default=""),
 ):
+    # Validate access code when the gate is active
+    if ACCESS_CODE and access_code.strip() != ACCESS_CODE:
+        raise HTTPException(status_code=401, detail="Invalid access code. Please check your code and try again.")
+
     # Validate file type
     filename = resume_file.filename or ""
     if not filename.lower().endswith(".docx"):
