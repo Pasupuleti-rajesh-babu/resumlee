@@ -20,7 +20,7 @@ export default function AppHeader() {
 
         <Link
           href="/"
-          className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-900 transition-colors"
+          className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-900 transition-colors min-h-[44px] px-1"
         >
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
             <path d="M9 11L5 7l4-4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />

@@ -541,7 +541,7 @@ export default function TailorWorkspace() {
                   <button
                     key={p}
                     onClick={() => applyPreset(p, clients)}
-                    className={`px-4 py-2 rounded-lg text-sm font-semibold border transition-all min-h-[40px] ${
+                    className={`px-4 py-2 rounded-lg text-sm font-semibold border transition-all min-h-[44px] ${
                       preset === p
                         ? "bg-brand-600 text-white border-brand-600 shadow-sm"
                         : "bg-white text-slate-600 border-slate-200 hover:border-brand-300 hover:text-brand-600"
@@ -554,7 +554,7 @@ export default function TailorWorkspace() {
                   </button>
                 ))}
               {preset === "custom" && (
-                <span className="px-4 py-2 rounded-lg text-sm font-semibold border bg-brand-50 text-brand-600 border-brand-200 min-h-[40px] flex items-center">
+                <span className="px-4 py-2 rounded-lg text-sm font-semibold border bg-brand-50 text-brand-600 border-brand-200 min-h-[44px] flex items-center">
                   Custom
                 </span>
               )}

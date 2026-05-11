@@ -31,8 +31,8 @@ export default function HeroSection() {
           DOCX structure, bullets, fonts, and spacing stay exactly as they are.
         </p>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <a href="/app" className="btn-primary text-base py-3.5 px-8">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4 w-full sm:w-auto">
+          <a href="/app" className="btn-primary text-base py-4 px-8 w-full sm:w-auto">
             Tailor my resume
             <svg
               width="16"
@@ -50,7 +50,7 @@ export default function HeroSection() {
               />
             </svg>
           </a>
-          <a href="#how-it-works" className="btn-secondary text-base py-3.5 px-8">
+          <a href="#how-it-works" className="btn-secondary text-base py-4 px-8 w-full sm:w-auto">
             See how it works
           </a>
         </div>
