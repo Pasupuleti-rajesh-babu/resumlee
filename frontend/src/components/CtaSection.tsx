@@ -26,7 +26,7 @@ export default function CtaSection() {
             </p>
             <a
               href="/app"
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 min-h-[52px] bg-brand-500 hover:bg-brand-600 text-white font-semibold rounded-xl transition-all duration-150 active:scale-95 w-full sm:w-auto"
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 min-h-[52px] bg-brand-500 hover:bg-brand-600 text-white font-semibold rounded-xl transition-all duration-150 active:scale-95"
             >
               Tailor my resume now
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
