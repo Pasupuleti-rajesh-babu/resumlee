@@ -1,6 +1,5 @@
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
-import TailorWorkspace from "@/components/TailorWorkspace";
 import HowItWorks from "@/components/HowItWorks";
 import Benefits from "@/components/Benefits";
 import CtaSection from "@/components/CtaSection";
@@ -11,7 +10,6 @@ export default function Home() {
     <main className="min-h-screen">
       <Navbar />
       <HeroSection />
-      <TailorWorkspace />
       <HowItWorks />
       <Benefits />
       <CtaSection />

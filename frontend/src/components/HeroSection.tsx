@@ -32,7 +32,7 @@ export default function HeroSection() {
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <a href="#tailor" className="btn-primary text-base py-3.5 px-8">
+          <a href="/app" className="btn-primary text-base py-3.5 px-8">
             Tailor my resume
             <svg
               width="16"

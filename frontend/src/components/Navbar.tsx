@@ -50,14 +50,14 @@ export default function Navbar() {
             How it works
           </a>
           <a
-            href="#tailor"
+            href="/app"
             className="btn-primary text-sm py-2 px-5"
           >
             Try it free
           </a>
         </nav>
 
-        <a href="#tailor" className="sm:hidden btn-primary text-sm py-2 px-4">
+        <a href="/app" className="sm:hidden btn-primary text-sm py-2 px-4">
           Try free
         </a>
       </div>
